@@ -1,0 +1,41 @@
+[Abstract Draft]
+
+[Hook statement:]
+
+
+
+
+[Background:]
+A Crop Data Layer (CDL) is a raster, georeferenced, crop-specific land cover data layer created annually by the National Agricultural Statistics Service (NASS) for the continental United States since 2008 using moderate resolution satellite imagery and extensive agricultural ground truth. A CDL has a number of beneficial uses such as providing crop acreage estimates in addition to documenting historical agricultural land use. The latter is of particular interest when considering historical agricultural management practices from a geospatial perspective.
+
+[Recent Efforts in this line of research:]
+
+Interests in classifying and monitoring crops at the local-scale using high spatial resolution satellite imagery continues to grow with the majority of attention focused on surveying the most recent crop acreage and improving surveying techniques in preparation for next year's growing season. The generation of historical crop land cover data from remotely sensed imagery using modern techniques, however remains elusive.
+
+
+
+
+
+[What did we attempt to do?]
+This pilot study was conducted to develop an elegant and replicable remote sensing process capable of generating a CDL at field scale for a given year and to subsequently assess its applicability. Normalized Difference Vegetation Index (NDVI) imagery was collected from Landsat 8 between April 27 and September 11 for 2014 and 2015, covering a survey of 30 contiguous fields, 3 miles North of Verona, ND. Landsat was the instrument of choice due to its high spatial resolution which is beneficial when considering individual fields. The surveyed fields in question produced a rotating mix of corn, soybeans, and wheat during each growing season in 2014 and 2015. A temporal composite NDVI images were created by stacking individual time-sequenced NDVI images collected on successive days across the growing period. Phenology curves were obtained for each crop for 2015 from the composite and used as temporal-NDVI reference spectra in conjunction with Spectral Feature Fitting (SFF) to create a crop-specific classified image or CDL for 2015 and 2014. In order for SFF to work with the 2014 composite image, which had fewer images due to cloud coverage, a quadratic interpolation method was used to assess what the NDVI response would be for days in between revisits. These interpolated NDVI response images were then added to the 2014 composite to ensure that dimensionality was equal between 2015 and 2014 in order that SFF analysis could be performed.
+
+
+
+
+[For what purpose and to who's benefit?]
+
+This explorative method aimed towards the goal of generating a reasonable CDL under the constraint of limited temporal resolution, impeding cloud coverage, and limited data availability, would allow for CDLs to be produced under similar constraints for years before 1997 when NASS first began producing and releasing CDL datasets. Because Landsat missions have been providing remotely sensed imagery since 1972, this method could extend historical CDL data coverage by more than two decades allowing for long term temporal studies of changes in agricultural practices from a geospatial perspective.
+
+
+[What did our initial findings show?]
+
+Initial results indicate that after utilizing Spectral Feature Fitting with crop-specific phenology curves it is possible to produce a CDL for the year 2014 utilizing 2015 phenology curves as a reference.
+
+
+
+
+
+
+[Consolidated]
+
+A Crop Data Layer (CDL) is a raster, georeferenced, crop-specific land cover data layer created annually by the National Agricultural Statisitcs Service (NASS) for the continental United States since 2008 using moderate resolution satellite imagery and extensive agricultural ground truth. A CDL has a number of benificial uses such as providing crop acreage estimates in addition to documenting historical agricultural land use. The later is of particular interest when considering historical agricultural management practices from a geospatial perspective. This study was conducted to develop an elegant and replicable remote sensing process capable of generating CDL and subsequently assess its applicability. Normalized Difference Vegetation Index (NDVI) imagery was collected from Landsat 8 between April 27 and September 11 for 2014 and 2015, covering a survey of 30 contiguous fields, 3 miles North of Verona, ND. The surveyed fields produced a rotating mix of corn, soybeans, and wheat during each growing season in 2014 and 2015. Phenology curves were obtained for each crop for the specified date range and used as temporal-NDVI reference spectra in conjuction with Spectral Feature Fitting to create a crop-specific classified image or CDL. Initial results revealed that after utilizing Spectral Feature Fitting with crop-specific phenology curves it was possible to produce a CDL for the year 2014. This explorative method aimed towards the goal of generating a reasonable CDL under the constraint of limited temporal resolution, impeding cloud coverage, and limited data availability, would allow for CDLs to be produced under similar constraints for years before 1997 when NASS first began producing and releasing CDL datasets. Because Landsat missions have been providing remotely sensed imagery since 1972, this method could extend historical CDL data coverage by more than two decades allowing for long term temporal studies of changes in agriculutral practices from a geospatial perspective.

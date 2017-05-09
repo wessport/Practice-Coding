@@ -1,0 +1,29 @@
+C:\Python27\ArcGISx6410.3\python.exe modDEM.py lidar_raw.asc line.asc point.asc lidar_mod.asc
+
+
+Navigating in LINUX Bash
+
+cd "D:\Wes\Work\USDA\raw\ND\term_proj_nd\NDVI_2013"
+
+CREATING A LIST
+
+ls > mytextfilename.txt
+
+
+
+IF(C15859=-9999,C15859=K15859)
+
+=IF(B7093<>E7093,-9999,F7093)
+
+
+=IF(C1<10,0,"")
+
+
+
+
+# CLIMATE SCRUBBER
+
+IF dateFromAllDates =/ dateWithClimateData
+  return: -9999
+
+elseif return valueOfClimateData

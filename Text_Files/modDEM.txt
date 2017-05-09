@@ -1,0 +1,15 @@
+# Command Line input to perform DEM hydrocorrections using modDEM python script
+
+C:\Python27\ArcGISx6410.3\python.exe modDEM.py raw_lidar_utm.asc lines.asc points.asc dem_mod.asc
+
+UnboandLocalError: local variable 'lineCount' referenced before assignment
+
+
+C:\Python27\ArcGISx6410.3\python.exe modDEM2.py raw_lidar_utm.asc lines.asc points.asc dem_mod.asc
+
+KeyError: 1373.0
+
+# Using modDEM.py taken from ND_lidar_correction NOT the one from NDtestModDEM
+C:\Python27\ArcGISx6410.3\python.exe modDEM.py raw_lidar_utm.asc lines.asc points.asc dem_mod.asc
+
+KeyError: 1373.0

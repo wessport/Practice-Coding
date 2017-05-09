@@ -1,0 +1,62 @@
+# BACKGROUND INFO: FOR /F
+# FOR /F processing of a text file consists of reading the file, one line of text at a time and then breaking the line up into individual items of data called 'tokens'. The DO command is
+# then executed with the parameter(s) set to the token(s) found.
+
+# By default, /F breaks up the line at each blank space " ", and any blank lines are skipped, this default parsing behavior can be changed by applying one or more of the "options"
+# parameters. The option(s) must be contained within "a pair of quotes"
+
+
+# To DELETE unwanted files:
+# for /f %i in (files_del.txt) do del %i
+
+
+# LINUX To create a new file that shows the difference between two other files use:
+diff -u file1 file2 > file3
+
+# Windows: FC file1 file2 > file3
+
+
+# To copy selected files from a text file listing which files that you want:
+# for /f %i in (files_to_copy.txt) do xcopy "%i" D:\Wes\Work\USDA\raw\ND\Lidar\test_copy
+
+
+# To copy ASCII files from their folders to one single folder
+# for /R D:\Wes\Work\USDA\raw\ND\Lidar\nd_lidar_nov11 %f in (*.asc) do copy %f D:\Wes\Work\USDA\raw\ND\Lidar\test_copy
+
+# for each file for in directory c:\source and subdirectories /R that match pattern (\*.xml) put the file name in variable %f, then for each file do copy file copy %f to destination x:\\destination\\
+
+
+# BACKGROUND INFO: FOR /R
+# Explanation of FOR modifier /R Loop through files (Recurse subfolders)
+# This command walks down the folder tree starting at [drive:]path, and executes the DO statement against each matching file.
+
+# If the [drive:]path are not specified they will default to the current drive:path.
+
+# Unlike some other variants of the FOR command you must include a wildcard (either * or ?) in the 'set' to get consistent results returned. In many cases you can work around this by adding a single character # wildcard e.g. if you are looping through multiple folders to find the exact filename myfile.txt you could instead specify myfile.t?t
+
+
+LINUX BASH
+$ for i in `cat ND_Clark.txt`; do cp ${i} //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/; done;
+
+$ ls //161.45.156.61/Public/WesUSDA/Data/North_Dakota/ND_NDVI/ > ND_Clark.txt
+
+
+find . *.zip > Clark_1990.txt
+
+for i in `cat Clark_1990.txt`; do mv ${i} //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/; done;
+
+find . *.zip > Clark_1995.txt
+
+for i in `cat Clark_1995.txt`; do mv ${i} //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/; done;
+
+find . *.zip > Clark_2000.txt
+
+for i in `cat Clark_2000.txt`; do mv ${i} //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/; done;
+
+
+
+\\D50903GIS\Sunflower\USDA NDVI Downloads\MS_NDVI
+
+
+
+.

@@ -1,0 +1,3 @@
+#This is the command line expression used to load the GDAL environment
+
+bash$ "C:\OSGeo4W64\OSGeo4W.bat"
