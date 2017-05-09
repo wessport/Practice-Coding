@@ -1,7 +1,7 @@
 # Scratch Paper used for learning purposes
 
 # To run this code, open the Command Prompt/Shell and type the following:
-# python.exe "C:\Users\Wesley\wessport\github\Scratch Paper Python.py"
+# python.exe "C:\Users\Wesley\wessport\github\Scratch_Paper_Python.py"
 
 
 ingredients = ['snails', 'leeches', 'gorilla belly-button lint',
