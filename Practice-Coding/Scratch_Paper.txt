@@ -1,6 +1,0 @@
-Work flow Ideas:
-
-Segment I24 based on Thiessen polygons and individually assign segments proper
-AADT values.
-
-This is just scratch paper.
