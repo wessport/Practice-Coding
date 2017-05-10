@@ -38,7 +38,7 @@ diff -u file1 file2 > file3
 LINUX BASH
 $ for i in `cat ND_Clark.txt`; do cp ${i} //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/; done;
 
-$ ls //161.45.156.61/Public/WesUSDA/Data/North_Dakota/ND_NDVI/ > ND_Clark.txt
+$ ls //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ > ND_Clark.txt
 
 
 find . *.zip > Clark_1990.txt
