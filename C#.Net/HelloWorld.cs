@@ -6,8 +6,10 @@ namespace ConsoleApplication
     {
         public static void Main()
         {
-            Console.WriteLine("Hello World!")
+            var name = "Jeff"
+            Console.WriteLine($"Hello {name}!")
         }
     }
 
 }
+
