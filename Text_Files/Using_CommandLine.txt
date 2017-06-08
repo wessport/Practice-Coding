@@ -54,7 +54,6 @@ find . *.zip > Clark_2000.txt
 for i in `cat Clark_2000.txt`; do mv ${i} //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/; done;
 
 
-
 \\D50903GIS\Sunflower\USDA NDVI Downloads\MS_NDVI
 
 
