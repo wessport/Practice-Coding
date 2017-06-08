@@ -1,0 +1,3 @@
+# Reproject raster to NAD83 UTM ZONE14
+
+gdalwarp -t_srs EPSG:26914 LT50300282000357.B3.tif LT50300282000357.B3_proj.tif
