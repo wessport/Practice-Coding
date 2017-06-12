@@ -4,3 +4,13 @@ gdalwarp -t_srs EPSG:26914 LT50300282000357.B3.tif LT50300282000357.B3_proj.tif
 
 # For loop through rasters in folder
 FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26914 %I %~nI_proj.tif
+
+# Mosaic
+
+gdalwarp -t_srs EPSG:26916 LC80230362015029.B5.tif LC80230372015029.B5.tif mosaic.tif
+
+FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26916 %I %~nI_proj.tif
+
+# Clip
+
+gdalwarp -t_srs EPSG:26916 -cutline New_Shapefile.shp -cl New_Shapefile -crop_to_cutline LC80230362015029.B5_proj.tif  test_clip.tiff
