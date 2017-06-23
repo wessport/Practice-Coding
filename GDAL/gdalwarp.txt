@@ -14,3 +14,6 @@ FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26916 %I %~nI_proj.tif
 # Clip
 
 gdalwarp -t_srs EPSG:26916 -cutline New_Shapefile.shp -cl New_Shapefile -crop_to_cutline LC80230362015029.B5_proj.tif  test_clip.tiff
+
+# Must specify output nodata-value to remove black edges.
+ gdalwarp -t_srs EPSG:26916 -dstnodata -99 -cutline New_Shapefile.shp -cl New_Shapefile -crop_to_cutline LC80230362015029.B5_proj.tif  test_clip2.tiff
