@@ -37,14 +37,14 @@ function getNDVIimages(area, collection_name, redBand, nirBand){
   }
 }
 
-var region =  [
+var regionMS =  [
                 [-91.0382080078125, 33.84988869610126], // Test Coordinates Rosedale-Merigold-12-Avon MS
                 [-90.72509765625, 33.8339199536547],
                 [-90.72509765625, 33.23639027157906],
                 [-91.05194091796875, 33.224903086263964]
               ];
 
-var regionND = []
+var regionND = [[-98.4129,46.754106],[-97.925536,46.752000],[-97.936279,46.202047],[-98.417743, 46.205514]]
 
 var region2 =  [
                 [-90.956962, 34.40944], //Coordinates of the study area in MS
@@ -52,7 +52,7 @@ var region2 =  [
                 [-90.26126, 33.40915],
                 [-90.958858, 33.432743]
             ];
-getNDVIimages(region, 'LANDSAT/LT5_SR', 'B2', 'B3' );
+getNDVIimages(regionMS, 'LANDSAT/LT5_SR', 'B2', 'B3' );
 
 //LANDSAT/LC8_SR   Landsat 8                                B4, B5    Data availability (time)  Apr 11, 2013 - Nov 1, 2015
 //LANDSAT/LE7_SR  Landsat 7    --LEDAPS/LE7_L1T_SR          B3, B4    Data availability (time)  Jan 1, 1999 - Mar 24, 2017
