@@ -8,6 +8,10 @@
 library(ggplot2)
 library(readr)
 library(ggthemes)
+library(dplyr)
+
+# Set working directory
+setwd("E:/Wes/Work/Rusle2/R_input")
 
 # Read in the cell data
 cell83 <- read_csv("E:/Wes/Work/Rusle2/R_input/cell83.csv")
@@ -39,5 +43,9 @@ g <- g + scale_x_continuous(
 g
 
 
-filename <- "Cell 83"
+filename <- "Cell_83.png"
 ggsave(filename, plot = last_plot(), device = "png", width = 5, height = 4, units = "in", dpi= 300)
+
+
+# Plot a particular year
+selected.year <- select_if(cell83$Year_frac,cell83$Year_frac < 1983)
