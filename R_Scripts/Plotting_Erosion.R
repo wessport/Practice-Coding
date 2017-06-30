@@ -11,232 +11,132 @@ library(ggthemes)
 library(dplyr)
 library(gridExtra)
 library(grid)
+library(scales)
 
 # Set working directory
 setwd("E:/Wes/Work/Rusle2/R_input")
 
-# Read in the raw cell data
-cell83 <- read_csv("E:/Wes/Work/Rusle2/R_input/cell83.csv")
-cell312 <- read_csv("E:/Wes/Work/Rusle2/R_input/cell312.csv")
-cell522 <- read_csv("E:/Wes/Work/Rusle2/R_input/cell522.csv")
-cell552 <- read_csv("E:/Wes/Work/Rusle2/R_input/cell552.csv")
-cell1091 <- read_csv("E:/Wes/Work/Rusle2/R_input/cell1091.csv")
+# Read in the raw Cell data
+Cell83 <- read_csv("E:/Wes/Work/Rusle2/R_input/Cell83.csv")
+Cell312 <- read_csv("E:/Wes/Work/Rusle2/R_input/Cell312.csv")
+Cell522 <- read_csv("E:/Wes/Work/Rusle2/R_input/Cell522.csv")
+Cell552 <- read_csv("E:/Wes/Work/Rusle2/R_input/Cell552.csv")
+Cell1091 <- read_csv("E:/Wes/Work/Rusle2/R_input/Cell1091.csv")
 
-# Convert Scenario# into factor for color assignment purposes
-cell83$Scenario <- as.factor(cell83$Scenario)
-Scenario <- cell83$Scenario
+# Read in aggregated Cell data
+annual <- read_csv("E:/Wes/Work/Rusle2/R_input/aggregated_results_annual.csv")
+annual$Date <- as.Date(annual$Date, '%m/%d/%Y', origin="12-31-1984")
+annual$Scenario <- as.factor(annual$Scenario)
 
-# Specify the specific font family to be used in the plot
-windowsFonts(Times=windowsFont("TT Arial"))
+quarterly <- read_csv("E:/Wes/Work/Rusle2/R_input/aggregated_results_quarterly.csv")
+quarterly$Date <- as.Date(quarterly$Date, '%m/%d/%Y')
+quarterly$Scenario <- as.factor(quarterly$Scenario)
 
-# Plot the cell data using ggplot2
-g <- ggplot(cell83, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-g <- g + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-g <- g + ggtitle('Cell 83')
-g <- g + labs(x = "Year", y = "Erosion [t/ac]")
-g <- g + theme(plot.title = element_text(
-  size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-)) 
-g <- g + scale_x_continuous(
-  limits = c(1982, 1994),
-  breaks = c(1982, 1984, 1986, 1988, 1990, 1992, 1994)
+monthly <- read_csv("E:/Wes/Work/Rusle2/R_input/aggregated_results_monthly.csv")
+monthly$Date <- as.Date(monthly$Date, '%m/%d/%Y')
+monthly$Scenario <- as.factor(monthly$Scenario)
+
+weekly<- read_csv("E:/Wes/Work/Rusle2/R_input/aggregated_results_weekly.csv")
+weekly$Date <- as.Date(weekly$Date, '%m/%d/%Y')
+weekly$Scenario <- as.factor(weekly$Scenario)
+
+
+# WORKING WITH AGGREGATED DATA ---------------------------------
+
+# y-axis digit transformation function - 2 decimal places
+scaleFUN <- function(x) sprintf("%.2f", x)
+
+# Cell 83
+selected.year <- filter(annual, annual$Cell == 83)
+p83 <- ggplot(selected.year, aes(Date,Average, color = Scenario, group = Scenario)) 
+p83 <- p83 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
+p83 <- p83 + scale_x_date(
+  breaks = date_breaks('year'),
+  labels = date_format('%Y')
 )
+p83 <- p83 + labs(y = "Cell 83 [tn/ac]")
+p83 <- p83 + theme(
+  legend.position = c(0.9, 0.7),
 
-g
+  axis.title.x = element_blank(),
+  axis.text.x = element_blank(),
+  axis.title.y = element_text(face = "bold")
+) + guides(shape=guide_legend(ncol=2))
+p83 <- p83 + scale_y_continuous(labels=scaleFUN)
 
-
-filename <- "Cell_83.png"
-ggsave(filename, plot = last_plot(), device = "png", width = 5, height = 4, units = "in", dpi= 300)
-
-
-# Multiplots  ---------------------------------
-
-# Setting up plot objects for multiplot
-
-# Plot a particular year
-selected.year <- filter(cell83,cell83$Year_frac < 1983)
-# Plot 1982
-p1 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p1 <- p1 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p1 <- p1 + ggtitle('1982')
-p1 <- p1 + labs(x = "Year", y = "Erosion [t/ac]")
-p1 <- p1 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
-p1 <- p1 + scale_x_continuous(
-  limits = c(1982, 1994),
-  breaks = c(1982, 1984, 1986, 1988, 1990, 1992, 1994)
+# Cell 312
+selected.year <- filter(annual, annual$Cell == 312)
+p312 <- ggplot(selected.year, aes(Date,Average, color = Scenario, group = Scenario)) 
+p312 <- p312 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
+p312 <- p312 + scale_x_date(
+  breaks = date_breaks('year'),
+  labels = date_format('%Y')
 )
+p312 <- p312 + labs(y = "Cell 312 [tn/ac]")
+p312 <- p312 + theme(
+  legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.text.x = element_blank(),
+  axis.title.y = element_text(face = "bold")
+)
+p312 <- p312 + scale_y_continuous(labels=scaleFUN)
 
-# Plot 1983
-selected.year <- filter(cell83,cell83$Year_frac < 1984 & cell83$Year_frac > 1983)
-p2 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p2 <- p2 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p2 <- p2 + ggtitle('1983')
-p2 <- p2 + labs(x = "Year", y = "Erosion [t/ac]")
-p2 <- p2 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
+# Cell 522
+selected.year <- filter(annual, annual$Cell == 522)
+p522 <- ggplot(selected.year, aes(Date,Average, color = Scenario, group = Scenario)) 
+p522 <- p522 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
+p522 <- p522 + scale_x_date(
+  breaks = date_breaks('year'),
+  labels = date_format('%Y')
+)
+p522 <- p522 + labs(y = "Cell 522 [tn/ac]")
+p522 <- p522 + theme(
+  legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.text.x = element_blank(),
+  axis.title.y = element_text(face = "bold")
+)
+p522 <- p522 + scale_y_continuous(labels=scaleFUN)
 
-# Plot 1984
-selected.year <- filter(cell83,cell83$Year_frac < 1985 & cell83$Year_frac > 1984)
-p3 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p3 <- p3 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p3 <- p3 + ggtitle('1984')
-p3 <- p3 + labs(x = "Year", y = "Erosion [t/ac]")
-p3 <- p3 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-)) 
+# Cell 552
+selected.year <- filter(annual, annual$Cell == 552)
+p552 <- ggplot(selected.year, aes(Date,Average, color = Scenario, group = Scenario)) 
+p552 <- p552 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
+p552 <- p552 + scale_x_date(
+  breaks = date_breaks('year'),
+  labels = date_format('%Y')
+)
+p552 <- p552 + labs(y = "Cell 552 [tn/ac]")
+p552 <- p552 + theme(
+  legend.position = "none",
+  axis.title.x = element_blank(),
+  axis.text.x = element_blank(),
+  axis.title.y = element_text(face = "bold")
+)
+p552 <- p552 + scale_y_continuous(labels=scaleFUN)
 
-# Plot 1985
-selected.year <- filter(cell83,cell83$Year_frac < 1986 & cell83$Year_frac > 1985)
-p4 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p4 <- p4 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p4 <- p4 + ggtitle('1985')
-p4 <- p4 + labs(x = "Year", y = "Erosion [t/ac]")
-p4 <- p4 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-)) 
+# Cell 1091
+selected.year <- filter(annual, annual$Cell == 1091)
+p1091 <- ggplot(selected.year, aes(Date,Average, color = Scenario, group = Scenario)) 
+p1091 <- p1091 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
+p1091 <- p1091 + scale_x_date(
+  breaks = date_breaks('year'),
+  labels = date_format('%Y')
+)
+p1091 <- p1091 + labs(x = "Year", y = "Cell 1091 [tn/ac]")
+p1091 <- p1091 + theme(
+  legend.position = "none",
+  axis.title.x = element_text(face = "bold"),
+  axis.title.y = element_text(face = "bold")
+)
+p1091 <- p1091 + scale_y_continuous(labels=scaleFUN)
 
-# Plot 1986
-selected.year <- filter(cell83,cell83$Year_frac < 1987 & cell83$Year_frac > 1986)
-p5 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p5 <- p5 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p5 <- p5 + ggtitle('1986')
-p5 <- p5 + labs(x = "Year", y = "Erosion [t/ac]")
-p5 <- p5 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
 
-# Plot 1987
-selected.year <- filter(cell83,cell83$Year_frac < 1988 & cell83$Year_frac > 1987)
-p6 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p6 <- p6 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p6 <- p6 + ggtitle('1987')
-p6 <- p6 + labs(x = "Year", y = "Erosion [t/ac]")
-p6 <- p6 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-)) 
+title <- textGrob("Yearly Erosion", gp=gpar(fontsize=20,fontface="bold"))
 
-# Plot 1988
-selected.year <- filter(cell83,cell83$Year_frac < 1989 & cell83$Year_frac > 1988)
-p7 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p7 <- p7 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p7 <- p7 + ggtitle('1988')
-p7 <- p7 + labs(x = "Year", y = "Erosion [t/ac]")
-p7 <- p7 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
+mp1 <- grid.arrange(p83,p312,p522,p552,p1091, ncol=1, top=title)
 
-# Plot 1989
-selected.year <- filter(cell83,cell83$Year_frac < 1990 & cell83$Year_frac > 1989)
-p8 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p8 <- p8 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p8 <- p8 + ggtitle('1989')
-p8 <- p8 + labs(x = "Year", y = "Erosion [t/ac]")
-p8 <- p8 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
 
-# Plot 1990
-selected.year <- filter(cell83,cell83$Year_frac < 1991 & cell83$Year_frac > 1990)
-p9 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p9 <- p9 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p9 <- p9 + ggtitle('1990')
-p9 <- p9 + labs(x = "Year", y = "Erosion [t/ac]")
-p9 <- p9 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
 
-# Plot 1991
-selected.year <- filter(cell83,cell83$Year_frac < 1992 & cell83$Year_frac > 1991)
-p10 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p10 <- p10 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p10 <- p10 + ggtitle('1991')
-p10 <- p10 + labs(x = "Year", y = "Erosion [t/ac]")
-p10 <- p10 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
-
-# Plot 1992
-selected.year <- filter(cell83,cell83$Year_frac < 1993 & cell83$Year_frac > 1992)
-p11 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p11 <- p11 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p11 <- p11 + ggtitle('1992')
-p11 <- p11 + labs(x = "Year", y = "Erosion [t/ac]")
-p11 <- p11 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
-
-# Plot 1993
-selected.year <- filter(cell83,cell83$Year_frac < 1994 & cell83$Year_frac > 1993)
-p12 <- ggplot(selected.year, aes(x = Year_frac, y = Erosion, color = Scenario, group = Scenario))
-p12 <- p12 + geom_point(aes(shape=Scenario)) + geom_line() + theme_few()
-p12 <- p12 + ggtitle('1993')
-p12 <- p12 + labs(x = "Year", y = "Erosion [t/ac]")
-p12 <- p12 + theme(plot.title = element_text(
-  #size = 20,
-  face = "bold",
-  margin = margin(10, 0, 10, 0), # Adds vertical whitespace around plot title 
-  hjust = 0.5, # centers the title
-  family = "Arial"# Font family
-))
-
-title <- textGrob("Cell 83", gp=gpar(fontsize=20,fontface="bold"))
-
-mp1 <- grid.arrange(p1,p2,p3,p4, ncol=2, top=title)
-mp2 <- grid.arrange(p5,p6,p7,p8, ncol=2, top=title)
-mp3 <- grid.arrange(p9,p10,p11,p12, ncol=2, top=title)
-
-# Save multiplot as png
-ggsave("mp1.png", mp1, device = "png", width = 8.5, height = 5, units = "in", dpi= 300)
 
 
