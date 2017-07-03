@@ -171,7 +171,7 @@ erosionPlotAvg <- function(cellData){
     # Cell 83
     selected.year <- filter(cellData, cellData$Cell == 83)
     p83 <- ggplot(selected.year, aes(Date,Average, color = Scenario, group = Scenario)) 
-    p83 <- p83 + geom_line(size=0.1) + theme_few()
+    p83 <- p83 + geom_line() + theme_few()
     p83 <- p83 + scale_colour_manual(values=values)
     p83 <- p83 + scale_x_date(
       breaks = date_breaks('year'),
@@ -269,7 +269,7 @@ erosionPlotAvg <- function(cellData){
   }
 }
 
-erosionPlotAvg(annual)
+erosionPlotAvg(weekly)
 
 # STATISTICS ---------------------------------
 
