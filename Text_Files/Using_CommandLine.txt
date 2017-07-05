@@ -56,6 +56,9 @@ for i in `cat Clark_2000.txt`; do mv ${i} //161.45.156.61/Public/Wes/USDA/Data/N
 
 \\D50903GIS\Sunflower\USDA NDVI Downloads\MS_NDVI
 
+LIST ONLY FILE NAMES IN DIRECTORY
+
+dir /b /a-d
 
 
 .
