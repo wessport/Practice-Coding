@@ -17,3 +17,12 @@ gdalwarp -t_srs EPSG:26916 -cutline New_Shapefile.shp -cl New_Shapefile -crop_to
 
 # Must specify output nodata-value to remove black edges.
  gdalwarp -t_srs EPSG:26916 -dstnodata -99 -cutline New_Shapefile.shp -cl New_Shapefile -crop_to_cutline LC80230362015029.B5_proj.tif  test_clip2.tiff
+
+
+# Handling No Data with gdal_calc.py
+
+gdal_calc.py -A input.tif --outfile=result.tif --calc="A*(A!=17)"
+
+gdal_calc.py -A LT50231995054_msc.tif --outfile=LT50231995054_msc_test.tif --calc="A*(A!=-9999)"
+
+C:/Python27_old/ArcGISx6410.3/python.exe C:/OSGeo4W64/bin/gdal_calc.py -A LT50231995054_msc.tif --outfile=LT50231995054_msc_test.tif --calc="A*(A!=-9999)"

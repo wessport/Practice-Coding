@@ -60,5 +60,9 @@ LIST ONLY FILE NAMES IN DIRECTORY
 
 dir /b /a-d
 
+CHANGE DRIVES
+
+cd /d
+
 
 .
