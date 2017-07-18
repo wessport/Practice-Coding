@@ -26,3 +26,5 @@ gdal_calc.py -A input.tif --outfile=result.tif --calc="A*(A!=17)"
 gdal_calc.py -A LT50231995054_msc.tif --outfile=LT50231995054_msc_test.tif --calc="A*(A!=-9999)"
 
 C:/Python27_old/ArcGISx6410.3/python.exe C:/OSGeo4W64/bin/gdal_calc.py -A LT50231995054_msc.tif --outfile=LT50231995054_msc_test.tif --calc="A*(A!=-9999)"
+
+# doesn't work because ArcGIS numpy is out of date and you can't update it without breaking ArcGIS. 
