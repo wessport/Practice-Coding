@@ -1,0 +1,23 @@
+# WES PORTER
+# JULY 20, 2017
+# Scratch code working with GDAL to create NDVI temporal image stacks
+
+# Strange issue with NoData and float values.
+
+# Try:
+
+gdalwarp -dstnodata -9999 input.tif output.tif
+
+gdalwarp -dstnodata -9999 LT50231990008_msc_null.tif LT50231990008_msc_null_warp.tif
+
+# ^ works to define nodata as -9999 instead of '-3.4028234663852886e+038'
+
+# Using gdalbuildvrt to stack NDVI images
+
+# Try
+
+gdalbuildvrt -separate stack.vrt LT50231985026_msc_null_warp.tif LT50231985106_msc_null_warp.tif LT50231985234_msc_null_warp.tif
+
+gdal_translate stack.vrt stack.tif
+
+# ^ works
