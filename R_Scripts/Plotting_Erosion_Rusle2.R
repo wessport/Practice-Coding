@@ -283,7 +283,7 @@ cells <- c(83,312,522,552,1091)
 # Correlation coefficients
 count <- 1
 for (i in 1:5){
-  cell <- filter(weekly, weekly$Cell == cells[i])
+  cell <- filter(annual, annual$Cell == cells[i])
   for (j in 1:5){
     cellScn <- filter(cell, cell$Scenario == j)
     cellScn6 <- filter(cell, cell$Scenario == 6)
@@ -300,3 +300,4 @@ for (i in 1:5){
 
 # Write results to a csv file. 
 write.csv(results,"statistics_weekly.csv",row.names = F,col.names = T)
+

@@ -3,7 +3,7 @@
 # USDA PROJECT - Discharge
 
 # Formatting USGS Big Sunflower Stream Disharge data by
-# inserting '0' into missing collection dates.
+# inserting '' into missing collection dates.
 
 # Workspace
 ws = "E:/Wes/Work/USDA/raw/Mississippi/Ms_BaseflowRemoval/"
@@ -35,12 +35,12 @@ for (i in 1:nrow(Dates)){
     
     } else {
       
-    dis_out[index,2] <- 0
+    dis_out[index,2] <- ''
     index = index + 1 }
     
   } else{
     
-  dis_out[index,2] <- 0
+  dis_out[index,2] <- ''
   index = index + 1}
   
 }
