@@ -1,0 +1,11 @@
+# Scratch formulas
+
+# Working with SCAN site precipitation data.
+
+IF(C2=-99.9,)
+
+IF(C3=-99.9,C3,IF((C3-ABS(C2))<0,C3,(C3-C2)))
+
+IF(C3=-99.9,C3,IF((C3-C2)<0,C3,(C3-C2)))
+
+IF((C3-C2)<0,C3,(C3-C2))
