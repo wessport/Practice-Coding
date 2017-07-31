@@ -23,6 +23,7 @@ for (i in files){
   rm(df) # remove temp variable
 }
 
+# Function that convert accumulated precip to daily precip
 SCAN_cleanData <- function(SCAN_site){
   
   # Has to come first or else it fails.
@@ -33,8 +34,11 @@ SCAN_cleanData <- function(SCAN_site){
   for (i in 1:nrow(SCAN_site)){
     
     if(i == 1){
-     
-       SCAN_site[i,4] <- SCAN_site[i,3] # Copy over the first record.
+      
+      if (SCAN_site[i,3] == -99.9){SCAN_site[i,4] <- -9999
+      } else {
+      SCAN_site[i,4] <- SCAN_site[i,3] # Copy over the first record.
+      }
        
     } else if (SCAN_site[i,3] == -99.9){ # If no data was reported, report no data value -9999
   
@@ -42,13 +46,19 @@ SCAN_cleanData <- function(SCAN_site){
   
     } else if (SCAN_site[i-a,3] == -99.9){ # Check to see if the previous record was no data.
       
-      while (SCAN_site[i-a,3] == -99.9){a <- a +1} 
+      while ((i-a)>1 & SCAN_site[i-a,3] == -99.9){a <- a +1}
       
       # Continue to look further back until no longer encountering no data.
       # Otherwise will get erroneously high daily precip value. 
       
-      SCAN_site[i,4] <- SCAN_site[i,3] - SCAN_site[i-a,3]
-      a <- 1
+      # If first event in entire dataset is no data
+      
+      if (SCAN_site[i-a,3] == -99.9){SCAN_site[i,4] <- SCAN_site[i,3]
+      
+      } else {
+        SCAN_site[i,4] <- SCAN_site[i,3] - SCAN_site[i-a,3]
+        a <- 1
+        }
   
     } else if ((SCAN_site[i,3] - SCAN_site[i-1,3])<0){ 
       # At the end of the month will be an accumulated precip value.
@@ -74,4 +84,13 @@ SCAN_cleanData <- function(SCAN_site){
 
 }
 
-SCAN_cleanData(Beasley)
+# Convert accumulated precip into daily precip for each SCAN site and write to file
+
+SCAN_cleanData(Beasley_Lake)
+SCAN_cleanData(Goodwin_Ck_Pasture)
+SCAN_cleanData(Goodwin_Ck_Timber)
+SCAN_cleanData(Perthshire)
+SCAN_cleanData(Sandy_Ridge)
+SCAN_cleanData(Scott)
+SCAN_cleanData(Tunica)
+SCAN_cleanData(Vance)
