@@ -683,17 +683,19 @@ residuals <- data.frame(matrix(ncol = 6, nrow=nrow(obs_bf_removed)))
 residuals[[1]] <- obs_bf_removed[[1]]
 colnames(residuals) <- c('Date','CYNI','VYNI','VYVI','VYNI_old','VYVI_old')
 
+# Absolute value of residuals
+
 residuals[[2]] <- abs(sim_cy_ni[[2]] - obs_bf_removed[[2]])
 residuals[[3]] <- abs(sim_vy_ni[[2]] - obs_bf_removed[[2]])  
 residuals[[4]] <- abs(sim_vy_vi[[2]] - obs_bf_removed[[2]])
 residuals[[5]] <- abs(old_sim_vy_ni[[2]] - obs_bf_removed[[2]])
 residuals[[6]] <- abs(old_sim_vy_vi[[2]] - obs_bf_removed[[2]])
 
-# residuals[[2]] <- sim_cy_ni[[2]] - obs_bf_removed[[2]]
-# residuals[[3]] <- sim_vy_ni[[2]] - obs_bf_removed[[2]]  
-# residuals[[4]] <- sim_vy_vi[[2]] - obs_bf_removed[[2]]
-# residuals[[5]] <- old_sim_vy_ni[[2]] - obs_bf_removed[[2]]
-# residuals[[6]] <- old_sim_vy_vi[[2]] - obs_bf_removed[[2]]
+residuals[[2]] <- sim_cy_ni[[2]] - obs_bf_removed[[2]]
+residuals[[3]] <- sim_vy_ni[[2]] - obs_bf_removed[[2]]
+residuals[[4]] <- sim_vy_vi[[2]] - obs_bf_removed[[2]]
+residuals[[5]] <- old_sim_vy_ni[[2]] - obs_bf_removed[[2]]
+residuals[[6]] <- old_sim_vy_vi[[2]] - obs_bf_removed[[2]]
 
 prcp_res_combined <- cbind(precip,select(residuals,CYNI,VYNI,VYVI,VYNI_old,VYVI_old))
 
@@ -709,4 +711,8 @@ dy_prcp_res <- dygraph(prcp_res, main = 'Residuals and Rainfall - August 8 2017 
 
 dy_prcp_res
 
+# QQplot of the residuals
+qqnorm(residuals$VYNI, main = 'VYNI  - Normal Q-Q Plot')
+qqline(residuals$VYNI)
 
+mean(residuals$VYNI)
