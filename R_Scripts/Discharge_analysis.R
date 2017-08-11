@@ -512,8 +512,8 @@ season_assign(old_sim_vy_ni_bymonth)
 season_assign(old_sim_vy_vi_bymonth)
 
 # Winter
-winter_stats_bymonth <- data.frame(matrix(ncol=7,nrow=5))
-colnames(winter_stats_bymonth) <- c('Run_Date','Breakdown','Season','Simulation_Type','Sim_Code','Nash_Sutcliffe','Nash_Sutcliffe_BF_Removed')
+winter_stats_bymonth <- data.frame(matrix(ncol=6,nrow=5))
+colnames(winter_stats_bymonth) <- c('Run_Date','Breakdown','Season','Simulation_Type','Sim_Code','Nash_Sutcliffe')
 
 winter_obs_bymonth <- filter(obs_bymonth,Season == 'winter')
 winter_sim_cy_ni_bymonth <- filter(sim_cy_ni_bymonth,Season == 'winter')
@@ -664,6 +664,7 @@ colnames(seasonal_stats_monthly)[7] <- 'Nash_Sutcliffe_BF_Removed'
 
 write.csv(seasonal_stats_monthly,paste(output_loc,"Seasonal_Monthly_Statistics_BF_Removed.csv"),row.names = F,col.names = T)
 
+
 # SEASONAL STATISTICS with daily data -----------------------------------------------------------------------
 season_assign(obs)
 season_assign(sim_cy_ni)
@@ -716,3 +717,23 @@ qqnorm(residuals$VYNI, main = 'VYNI  - Normal Q-Q Plot')
 qqline(residuals$VYNI)
 
 mean(residuals$VYNI)
+
+# Add Precip to seasonal stats ----------------------------------------------------------------------------
+
+precip_bymonth <- precip
+precip_bymonth$Date <- floor_date(precip_bymonth$Date, "month")
+precip_bymonth <- aggregate(Rain~Date, data=precip_bymonth, FUN=sum)
+
+season_assign(precip_bymonth)
+
+winter_precip_bymonth <- filter(precip_bymonth,Season == 'winter')
+avg_winter_precip_monthly <- mean(winter_precip_bymonth)
+
+spring_precip_bymonth <- filter(precip_bymonth,Season == 'spring')
+avg_spring_precip_monthly <- mean(spring_precip_bymonth)
+
+summer_precip_bymonth <- filter(precip_bymonth,Season == 'summer')
+avg_summer_precip_monthly <- mean(summer_precip_bymonth)
+
+fall_precip_bymonth <- filter(precip_bymonth,Season == 'fall')
+avg_fall_precip_monthly <- mean(fall_precip_bymonth)
