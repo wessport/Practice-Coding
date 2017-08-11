@@ -1,8 +1,8 @@
 # WES PORTER
 # 8/11/2017
-# USDA PROJECT - Discharge-analysis-function
+# USDA PROJECT - Discharge-analysis-refined
 
-# Script Summary: Create a function that removes baseflow, aggregates data, and produces statistics. 
+# Script Summary: Create a refined process that removes baseflow, aggregates data, and produces statistics. 
 
 library(dygraphs)
 library(dplyr)
