@@ -44,9 +44,10 @@ obs_bf_removed_byyear <- aggregate(Discharge~Date, data=obs_bf_removed_byyear, F
 
 files <- list.files(ws,pattern = glob2rx("S*.csv")) # Grab a list of the file names in ws
 
-daily_stats <- data.frame(matrix(ncol=4,nrow=length(files)))
-monthly_stats <- data.frame(matrix(ncol=4,nrow=length(files)))
-yearly_stats <- data.frame(matrix(ncol=4,nrow=length(files)))
+daily_stats <- data.frame(matrix(ncol=6,nrow=length(files)))
+monthly_stats <- data.frame(matrix(ncol=6,nrow=length(files)))
+yearly_stats <- data.frame(matrix(ncol=6,nrow=length(files)))
+cal_val_stats <- data.frame(matrix(ncol=9,nrow=length(files)))
 
 a <- 1
 for (i in files){
@@ -67,21 +68,58 @@ for (i in files){
   df_byyear <- aggregate(Discharge~Date, data=df_byyear, FUN=sum)
   assign(paste(name,'_byyear',sep=''), as.data.frame(df_byyear))
   
-  ns_d_df <- NSE(obs_bf_removed[[2]], df[[2]]) # calculate stats
-  ns_mo_df <- NSE(obs_bf_removed_bymonth[[2]], df_bymonth[[2]])
-  ns_an_df <- NSE(obs_bf_removed_byyear[[2]], df_byyear[[2]])
+  ns_d_df <- NSE(df[[2]],obs_bf_removed[[2]]) # calculate stats
+  pbias_d_df <- pbias(df[[2]],obs_bf_removed[[2]])
+  cod_d_df <- (cor(df[[2]],obs_bf_removed[[2]]))^2
+  ns_mo_df <- NSE(df_bymonth[[2]],obs_bf_removed_bymonth[[2]])
+  pbias_mo_df <- pbias(df_bymonth[[2]],obs_bf_removed_bymonth[[2]])
+  cod_mo_df <- (cor(df_bymonth[[2]],obs_bf_removed_bymonth[[2]]))^2
+  ns_an_df <- NSE(df_byyear[[2]],obs_bf_removed_byyear[[2]])
+  pbias_an_df <- pbias(df_byyear[[2]],obs_bf_removed_byyear[[2]])
+  cod_an_df <- (cor(df_byyear[[2]],obs_bf_removed_byyear[[2]]))^2
+
   daily_stats[a,1] <- run_date
   daily_stats[a,2] <- 'Daily'
   daily_stats[a,3] <- name
   daily_stats[a,4] <- ns_d_df
+  daily_stats[a,5] <- pbias_d_df
+  daily_stats[a,6] <- cod_d_df 
+  daily_stats <- arrange(daily_stats, desc(daily_stats[[1]]))
   monthly_stats[a,1] <- run_date
   monthly_stats[a,2] <- 'Monthly'
   monthly_stats[a,3] <- name
   monthly_stats[a,4] <- ns_mo_df
+  monthly_stats[a,5] <- pbias_mo_df
+  monthly_stats[a,6] <- cod_mo_df 
+  monthly_stats <- arrange(monthly_stats, desc(monthly_stats[[1]]))
   yearly_stats[a,1] <- run_date
   yearly_stats[a,2] <- 'Annually'
   yearly_stats[a,3] <- name
   yearly_stats[a,4] <- ns_an_df
+  yearly_stats[a,5] <- pbias_an_df
+  yearly_stats[a,6] <- cod_an_df 
+  yearly_stats <- arrange(yearly_stats, desc(yearly_stats[[1]]))
+  
+  #Calibration Validation
+  obs_cal <- filter(obs_bf_removed_bymonth,Date <= '2008-12-01')
+  cal <- filter(df_bymonth,Date <= '2008-12-01')
+  ns_mo_cal_df <- NSE(cal[[2]],obs_cal[[2]])
+  pbias_mo_cal_df <- pbias(cal[[2]],obs_cal[[2]])
+  cod_mo_cal_df <- (cor(cal[[2]],obs_cal[[2]]))^2
+  
+  obs_val <- filter(obs_bf_removed_bymonth,Date >= '2009-01-01')
+  val <- filter(df_bymonth,Date >= '2009-01-01')
+  ns_mo_val_df <- NSE(val[[2]],obs_val[[2]])
+  pbias_mo_val_df <- pbias(val[[2]],obs_val[[2]])
+  cod_mo_val_df <- (cor(val[[2]],obs_val[[2]]))^2
+  
+  cal_val_stats[a,1:3] <- monthly_stats[a,1:3]
+  cal_val_stats[a,4] <- ns_mo_cal_df
+  cal_val_stats[a,5] <- ns_mo_val_df
+  cal_val_stats[a,6] <- pbias_mo_cal_df
+  cal_val_stats[a,7] <- cod_mo_cal_df
+  cal_val_stats[a,8] <- pbias_mo_val_df
+  cal_val_stats[a,9] <- cod_mo_val_df
   
   a <- a+1
     
@@ -89,12 +127,18 @@ for (i in files){
   rm(df_bymonth)
   rm(df_byyear)
 }
+rm(a)
 
 stats <- rbind(daily_stats,monthly_stats,yearly_stats)
-colnames(stats) <- c('Run_Date','Breakdown','Simulation_Type','Nash_Sutcliffe')
+colnames(stats) <- c('Run_Date','Breakdown','Simulation_Type','Nash_Sutcliffe','PBIAS','Rsqr')
+
+colnames(cal_val_stats) <- c('Run_Date','Breakdown','Simulation_Type','Cal_NSE','Cal_PBIAS','Cal_Rsqr','Val_NSE','Val_PBIAS','Val_Rsqr')
+cal_val_stats <- arrange(cal_val_stats,desc(Run_Date))
 
 # write stats to csv
 output_loc <- "E:/Wes/Work/USDA/raw/Mississippi/Ms_BaseflowRemoval/Discharge_Analysis_AUGUST_8_2017/R_output/"
-write.csv(stats,paste(output_loc,"MS_Simulation_Statistics_BF_Removed",Sys.Date(),".csv",sep=''),row.names = F,col.names = T)
+write.csv(stats,paste(output_loc,"MS_Simulation_Statistics_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T)
+write.csv(cal_val_stats,paste(output_loc,"MS_Cal_Val_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T)
 
+test <- filter(Sim_CY_NI,year(Date)%%2 == 0)
 
