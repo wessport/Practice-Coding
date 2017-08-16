@@ -9,3 +9,8 @@ IF(C3=-99.9,C3,IF((C3-ABS(C2))<0,C3,(C3-C2)))
 IF(C3=-99.9,C3,IF((C3-C2)<0,C3,(C3-C2)))
 
 IF((C3-C2)<0,C3,(C3-C2))
+
+
+# Working with seasonal curve numbers management schedule
+
+IF(ISBLANK($I2),"",IF(ISNA(MATCH($B2,{12,1,2},0)),IF(ISNA(MATCH($B2,{3,4,5},0)),IF(ISNA(MATCH($B2,{6,7,8},0)),IF(ISNA(MATCH($B2,{9,10,11},0)),"ERROR",CONCATENATE($I2,"_F")),CONCATENATE($I2,"_U")),CONCATENATE($I2,"_S")),CONCATENATE($I2,"_W")))

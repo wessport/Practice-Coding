@@ -2,7 +2,8 @@
 # 8/07/2017
 # USDA PROJECT - Reach -analysis
 
-# Script Summary: Analyzing reach #967 which passes through USGS stream gage station in Clarksdale, MS
+# Script Summary: Analyzing reach #967 which passes through USGS stream gage station in Clarksdale, MS.
+# Investigating if simulated streamflow is closer to observed at top of watershed vs lower portion. 
 
 library(dygraphs)
 library(dplyr)
