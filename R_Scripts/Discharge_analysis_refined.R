@@ -17,11 +17,11 @@ library(zoo)
 
 
 # Workspace
-ws = "E:/Wes/Work/USDA/raw/Mississippi/Ms_BaseflowRemoval/Discharge_Analysis_AUGUST_8_2017/R_input"
-setwd(ws)
+in_loc = "E:/Wes/Work/USDA/raw/Mississippi/Ms_BaseflowRemoval/Discharge_Analysis_AUGUST_8_2017/R_input"
+
 
 # Read in USGS observed total streamflow
-obs <- read.csv(paste(ws,"/observed_discharge.csv",sep=''),stringsAsFactors = FALSE)
+obs <- read.csv(paste(in_loc,"/observed_discharge.csv",sep=''),stringsAsFactors = FALSE)
 obs$Date <- as.Date(obs$Date, '%m/%d/%Y')
 
 obs_bf_removed <- select(obs,Date,Discharge) # Remove baseflow from Observed
@@ -42,7 +42,7 @@ obs_bf_removed_byyear <- aggregate(Discharge~Date, data=obs_bf_removed_byyear, F
 
 # Read in Simulations
 
-files <- list.files(ws,pattern = glob2rx("S*.csv")) # Grab a list of the file names in ws
+files <- list.files(in_loc,pattern = glob2rx("S*.csv")) # Grab a list of the file names
 
 # Initialize empty stat data frames
 daily_stats <- data.frame(matrix(ncol=6,nrow=length(files)))
@@ -107,7 +107,7 @@ fall_obs_bymonth <- filter(obs_bf_removed_bymonth,Season == 'fall')
 a <- 1
 for (i in files){
   
-  df <- read.csv(i) # temp dataframe
+  df <- read.csv(paste(in_loc,'/',i,sep='')) # temp dataframe
   df$Date <- as.Date(df$Date, '%m/%d/%Y')
   name <- substr(i,1,nchar(i)-4) # subtract .csv
   assign(name, as.data.frame(df)) # create a dataframe with appropriate name
@@ -273,10 +273,10 @@ cal_val_m2_stats <- arrange(cal_val_m2_stats,desc(Run_Date))
 
 # write stats to csv
 output_loc <- "E:/Wes/Work/USDA/raw/Mississippi/Ms_BaseflowRemoval/Discharge_Analysis_AUGUST_8_2017/R_output/"
-write.csv(stats,paste(output_loc,"MS_Simulation_Statistics_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T)
-write.csv(seasonal_stats_bymonth,paste(output_loc,"MS_Sim_Seasonal_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T)
-write.csv(cal_val_stats,paste(output_loc,"MS_Cal_Val_M1_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T)
-write.csv(cal_val_m2_stats,paste(output_loc,"MS_Cal_Val_M2_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T)
+write.table(stats,paste(output_loc,"MS_Simulation_Statistics_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
+write.table(seasonal_stats_bymonth,paste(output_loc,"MS_Sim_Seasonal_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
+write.table(cal_val_stats,paste(output_loc,"MS_Cal_Val_M1_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
+write.table(cal_val_m2_stats,paste(output_loc,"MS_Cal_Val_M2_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
 
 
 
