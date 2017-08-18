@@ -111,7 +111,7 @@ for (i in files){
   df$Date <- as.Date(df$Date, '%m/%d/%Y')
   name <- substr(i,1,nchar(i)-4) # subtract .csv
   assign(name, as.data.frame(df)) # create a dataframe with appropriate name
-  run_date <- substr(file.info(i)$mtime,1,10)
+  run_date <- substr(file.info(paste(in_loc,'/',i,sep=''))$mtime,1,10)
   
   df_bymonth <- df # aggregate bymonth
   df_bymonth$Date <- floor_date(df_bymonth$Date, "month")
