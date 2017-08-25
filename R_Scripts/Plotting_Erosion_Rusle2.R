@@ -281,23 +281,28 @@ cells <- c(83,312,522,552,1091)
 
 
 # Correlation coefficients
+breakdown <-  monthly
 count <- 1
-for (i in 1:5){
-  cell <- filter(annual, annual$Cell == cells[i])
-  for (j in 1:5){
-    cellScn <- filter(cell, cell$Scenario == j)
-    cellScn6 <- filter(cell, cell$Scenario == 6)
+for (i in 1:5){ # Loop through each cell
+  cell <- filter(breakdown, breakdown$Cell == cells[i])
+  for (j in 1:5){ # Loop through each scenario for each cell
+    cellScn <- filter(cell, cell$Scenario == j) # sim - scn1-5
+    cellScn6 <- filter(cell, cell$Scenario == 6) # obs - scn6
     results[count,1] <- cells[i]
     results[count,2] <- j
     results[count,3] <- cor(cellScn6[[4]],cellScn[[4]])
     results[count,4] <- (cor(cellScn6[[4]],cellScn[[4]]))^2
     results[count,5] <- NSE(cellScn[[4]],cellScn6[[4]])
-    results[count,6] <- sum(cellScn6[[4]]-cellScn[[4]])*100/sum(cellScn6[[4]])
-    results[count,7] <- sqrt(sum((cellScn6[[4]]-cellScn[[4]])^2))/sqrt(sum((cellScn6[[4]]-mean(cellScn[[4]]))^2))
+    results[count,6] <- pbias(cellScn[[4]],cellScn6[[4]])
+    results[count,7] <- rsr(cellScn[[4]],cellScn6[[4]])
+    #results[count,6] <- sum(cellScn6[[4]]-cellScn[[4]])*100/sum(cellScn6[[4]])
+    #results[count,7] <- sqrt(sum((cellScn6[[4]]-cellScn[[4]])^2))/sqrt(sum((cellScn6[[4]]-mean(cellScn[[4]]))^2))
     count = count +1
     }
 }
 
 # Write results to a csv file. 
-write.csv(results,"statistics_weekly.csv",row.names = F,col.names = T)
+write.table(results,"statistics_monthly.csv",sep=',',row.names = F,col.names = T)
 
+
+hydroGOF_results <- results
