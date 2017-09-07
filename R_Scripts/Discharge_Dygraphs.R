@@ -78,8 +78,8 @@ for (i in files){
 
 # Dygraphs ----------------------------------------------------------------
 
-dis <- cbind(obs_bf_removed_bymonth,select(Sim_VY_I5_SCN_bymonth,Discharge),select(Sim_VY_I5_CN08_bymonth,Discharge))
-colnames(dis) <- c('Date','obsDis','Season','Sim_VY_I5_SCN','Sim_VY_I5_CN08')
+dis <- cbind(obs_bf_removed_bymonth,select(Sim_VY_I5_SCN_bymonth,Discharge),select(Sim_VY_I5_CN16_bymonth,Discharge))
+colnames(dis) <- c('Date','obsDis','Season','Sim_VY_I5_SCN','Sim_VY_I5_CN16')
 
 winter_months <- which(dis$Season == "winter") 
 spring_months <- which(dis$Season == "spring")
@@ -91,18 +91,18 @@ ribbon_data[spring_months] <-  0.25
 ribbon_data[summer_months] <-  0.5
 ribbon_data[fall_months] <-  0.75
 
-winter_dis_xts <- xts(select(dis,obsDis,Sim_VY_I5_SCN,Sim_VY_I5_CN08),order.by=winter_dis$Date)
+dis_xts <- xts(select(dis,obsDis,Sim_VY_I5_SCN,Sim_VY_I5_CN16),order.by=dis$Date)
 
-dy_winter_dis <- dygraph(winter_dis_xts, main = 'Seasonal Curve Numbers vs Annual Curve Numbers ', group='ensync',height = 450, width = "100%") %>%
+dy_dis <- dygraph(dis_xts, main = 'Simulated Discharge - Variable Curve Numbers', group='ensync',height = 450, width = "100%") %>%
   dyRangeSelector() %>%
   dySeries("obsDis", label = "Observed") %>%  
   dySeries("Sim_VY_I5_SCN", label = "Sim_VY_I5_SCN") %>%
-  dySeries("Sim_VY_I5_CN08", label = "Sim_VY_I5_CN08") %>%
+  dySeries("Sim_VY_I5_CN16", label = "Sim_VY_I5_CN16") %>%
   dyAxis('y', label = ' Discharge (m^3)') %>%
-  dyRibbon(data = ribbon_data, top = 0.15, bottom = 0.0, palette = c("#33A5FF","#A2FF33","#FF3633","#FFC133")) %>%
+  #dyRibbon(data = ribbon_data, top = 0.15, bottom = 0.0, palette = c("#33A5FF","#A2FF33","#FF3633","#FFC133")) %>%
   dyOptions(colors = RColorBrewer::brewer.pal(4, "Set1"),axisLineWidth = 1.5)  
 
-dy_winter_dis
+dy_dis
 
 #multi_dy_daily_bf_removed <- dy_dis_daily_new %>% tagList(dy_dis_daily_old) %>% browsable()
 #multi_dy_daily_bf_removed

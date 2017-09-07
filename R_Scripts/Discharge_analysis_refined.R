@@ -55,11 +55,15 @@ winter <- c(12,1,2)
 spring <- c(3,4,5)
 summer <- c(6,7,8)
 fall <- c(9,10,11)
+seasons <- c('winter','spring','summer','fall')
 
 winter_stats_bymonth <- data.frame(matrix(ncol=8,nrow=length(files)))
 spring_stats_bymonth <- data.frame(matrix(ncol=8,nrow=length(files)))
 summer_stats_bymonth <- data.frame(matrix(ncol=8,nrow=length(files)))
 fall_stats_bymonth <- data.frame(matrix(ncol=8,nrow=length(files)))
+
+seasonal_cal_val_stats <- data.frame(matrix(ncol=12,nrow=length(files)))
+
 
 # Assign season function
 season_assign <- function(data_input){
@@ -105,6 +109,7 @@ summer_obs_bymonth <- filter(obs_bf_removed_bymonth,Season == 'summer')
 fall_obs_bymonth <- filter(obs_bf_removed_bymonth,Season == 'fall')
 
 a <- 1
+b <- 1
 for (i in files){
   
   df <- read.csv(paste(in_loc,'/',i,sep='')) # temp dataframe
@@ -203,7 +208,6 @@ for (i in files){
   cod_mo_val_df <- (cor(val[[2]],obs_val[[2]]))^2
   rsr_mo_val_df <- rsr(val[[2]],obs_val[[2]])
   
-  
   cal_val_stats[a,1:3] <- monthly_stats[a,1:3]
   cal_val_stats[a,4] <- ns_mo_cal_df
   cal_val_stats[a,5] <- ns_mo_val_df 
@@ -213,6 +217,39 @@ for (i in files){
   cal_val_stats[a,9] <- cod_mo_val_df
   cal_val_stats[a,10] <- rsr_mo_cal_df
   cal_val_stats[a,11] <- rsr_mo_val_df
+  
+  # By season
+  for (i in seasons){
+    seasonal_obs_cal <- filter(filter(obs_bf_removed_bymonth, Season == i),Date <= '2008-12-01')
+    seasonal_cal <- filter(filter(df_bymonth, Season == i),Date <= '2008-12-01')
+    seasonal_ns_mo_cal_df <- NSE(seasonal_cal[[2]],seasonal_obs_cal[[2]])
+    seasonal_pbias_mo_cal_df <- pbias(seasonal_cal[[2]],seasonal_obs_cal[[2]])
+    seasonal_cod_mo_cal_df <- (cor(seasonal_cal[[2]],seasonal_obs_cal[[2]]))^2
+    seasonal_rsr_mo_cal_df <- rsr(seasonal_cal[[2]],seasonal_obs_cal[[2]])
+    
+    seasonal_obs_val <- filter(filter(obs_bf_removed_bymonth, Season == i),Date >= '2009-01-01')
+    seasonal_val <- filter(filter(df_bymonth, Season == i),Date >= '2009-01-01')
+    seasonal_ns_mo_val_df <- NSE(seasonal_val[[2]],seasonal_obs_val[[2]])
+    seasonal_pbias_mo_val_df <- pbias(seasonal_val[[2]],seasonal_obs_val[[2]])
+    seasonal_cod_mo_val_df <- (cor(seasonal_val[[2]],seasonal_obs_val[[2]]))^2
+    seasonal_rsr_mo_val_df <- rsr(seasonal_val[[2]],seasonal_obs_val[[2]])
+    
+    seasonal_cal_val_stats[b,1] <- run_date
+    seasonal_cal_val_stats[b,2] <- 'Monthly'
+    seasonal_cal_val_stats[b,3] <- name
+    seasonal_cal_val_stats[b,4] <- i
+    seasonal_cal_val_stats[b,5] <- seasonal_ns_mo_cal_df
+    seasonal_cal_val_stats[b,6] <- seasonal_pbias_mo_cal_df
+    seasonal_cal_val_stats[b,7] <- seasonal_cod_mo_cal_df
+    seasonal_cal_val_stats[b,8] <- seasonal_rsr_mo_cal_df
+    seasonal_cal_val_stats[b,9] <- seasonal_ns_mo_val_df
+    seasonal_cal_val_stats[b,10] <- seasonal_pbias_mo_val_df
+    seasonal_cal_val_stats[b,11] <- seasonal_cod_mo_val_df
+    seasonal_cal_val_stats[b,12] <- seasonal_rsr_mo_val_df
+    
+    b <- b + 1
+  }
+  
   
   #Calibration Validation Method 2 (m2)
   obs_cal_m2 <- filter(obs_bf_removed_bymonth,year(Date)%%2 == 0)
@@ -246,6 +283,7 @@ for (i in files){
   rm(df_byyear)
 }
 rm(a)
+rm(b)
 
 daily_stats <- arrange(daily_stats, desc(daily_stats[[1]]))
 monthly_stats <- arrange(monthly_stats, desc(monthly_stats[[1]]))
@@ -271,12 +309,16 @@ colnames(cal_val_m2_stats) <- c('Run_Date','Breakdown','Simulation_Type','Cal_NS
                                 'Cal_Rsqr','Val_Rsqr','Cal_RSR','Val_RSR')
 cal_val_m2_stats <- arrange(cal_val_m2_stats,desc(Run_Date))
 
+colnames(seasonal_cal_val_stats) <- c('Run_Date','Breakdown','Simulation_Type','Season','Cal_NSE','Cal_PBIAS','Cal_Rsqr','Cal_RSR','Val_NSE','Val_PBIAS','Val_Rsqr','Val_RSR')
+seasonal_cal_val_stats <- arrange(seasonal_cal_val_stats, desc(Season), desc(Run_Date))
+
 # write stats to csv
 output_loc <- "E:/Wes/Work/USDA/raw/Mississippi/Ms_BaseflowRemoval/Discharge_Analysis_AUGUST_8_2017/R_output/"
 write.table(stats,paste(output_loc,"MS_Simulation_Statistics_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
 write.table(seasonal_stats_bymonth,paste(output_loc,"MS_Sim_Seasonal_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
 write.table(cal_val_stats,paste(output_loc,"MS_Cal_Val_M1_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
 write.table(cal_val_m2_stats,paste(output_loc,"MS_Cal_Val_M2_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
+write.table(seasonal_cal_val_stats,paste(output_loc,"MS_Seasonal_Cal_Val_M1_Stats_BF_Removed_",Sys.Date(),".csv",sep=''),row.names = F,col.names = T, sep=',')
 
 
 

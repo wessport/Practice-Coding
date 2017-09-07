@@ -1,0 +1,257 @@
+---
+title: "Investigating Baseflow and Observed Discharge"
+author: "Wes Porter"
+date: "August 31, 2017"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+always_allow_html: yes
+urlcolor: blue
+---
+
+```{r Header, include=FALSE}
+# WES PORTER
+# 8/31/2017
+# USDA PROJECT - Baseflow trend
+
+# Script Summary: Plotting baseflow and observed discharge.
+
+library(dplyr)
+library(hydrostats)
+library(lubridate)
+```
+###Introduction
+
+The goal of this workflow is to investigate if any observable trends exist in our observed data - namely the baseflow and the observed discharge (baseflow removed). 
+
+The observed discharge data that we are using to compare our simulated discharge results comes from USGS gage station: 
+
+07288500 BIG SUNFLOWER RIVER AT SUNFLOWER, MS
+
+
+Before we can begin analyzing the observed discharge data to see if there are any trends that could affect our calibration-validation process, we need to import the raw data into R.  
+
+```{r Input}
+in_loc <- file.path("E:","Wes","Work","USDA","raw","Mississippi","Ms_BaseflowRemoval","Discharge_Analysis_AUGUST_8_2017","R_input")
+
+# Read in USGS observed total streamflow
+obs <- read.csv(file.path(in_loc,"observed_discharge.csv"),stringsAsFactors = FALSE)
+obs$Date <- as.Date(obs$Date, '%m/%d/%Y')
+
+```
+.
+
+###Baseflow
+ 
+Once we have the data imported, we can use the hydrostats package to calculate the baseflow. 
+
+```{r Baseflow}
+# Calculate baseflow from Observed
+obs_bf <- select(obs,Date,Discharge) 
+colnames(obs_bf) <- c('Date','Q')
+obs_bf <- baseflows(obs_bf, ts='daily')
+```
+.
+
+We can then plot the baseflow and add a linear regression line to see if there's a visual trend to the data.
+
+```{r Plot Baseflow}
+x_lab <- "Date"
+y_lab <- "Baseflow [m^3]"
+
+plot(obs_bf$Date, obs_bf$bf, main = "Baseflow", xlab = x_lab, ylab = y_lab, col = "blue", pch = 16)
+
+lin_reg <- lm(obs_bf$bf ~ obs_bf$Date)
+
+# Add line - Intercept of linear reg and slope
+abline(lin_reg$coefficients[1],lin_reg$coefficients[2], col = "red")
+```
+.
+
+At first glance it looks like there isn't a trend. So let's look at the summary statistics of our linear regression to verify what the plot is showing. 
+
+```{r BF Summary Results}
+summary(lin_reg)
+```
+.
+
+In this case we are only interested in seeing if there is a response in Baseflow across time, so the statistics for 'obs_bf$Date' are what we should focus our consideration on. The statistics that we're most interested in are the 't value', 'Pr(>|t|)', and the 'F-statistic'. 
+
+The t-value indicates how many standard deviations our slope coefficient (-3.407) is from zero. The p-value suggests how likely it is that we would observe a relationship between the Date and Baseflow due to random chance. The F-statistic indicates whether there is a relationship between predictor and response variables. The further the F-statistic from 1, the more likely that a relationship exists.  
+
+When looking at Baseflow for the entire period 2002-2016, we have a t-value of -0.544, a p-value of 0.586, and a F-statistic of 0.2967 which indicate that there is not a statistically significant relationship between Baseflow and time. This supports our earlier graphical prognosis that there isn't a significant positive or negative trend in baseflow from 2002 to 2016. 
+
+But this doesn't tell us if there are trends to the baseflow during our calibration and validation periods. If we break up the baseflow into two parts based on the calibration period 2002-2008, and validation period 2008-2016, we can look to see if trends exits across shorter time periods.  
+
+```{r BF Cal Period}
+# Baseflow Calibration period
+
+bf_cal <- filter(obs_bf,Date <= '2008-12-01')
+
+plot(bf_cal$Date, bf_cal$bf, main = "Baseflow - Calibration Period", xlab = x_lab, ylab = y_lab, col = "blue", pch = 16)
+
+fit_cal <- lm(bf_cal$bf ~ bf_cal$Date)
+abline(lm(bf_cal$bf ~ bf_cal$Date), col = "red")
+```
+.
+
+When we look at baseflow during the calibration period, a downward sloping trend appears. 
+
+```{r}
+summary(fit_cal)
+```
+.
+
+The summary statistics of the linear regression report the same negative trend of baseflow over time during the calibration period. 
+Our t-value (-19.05) is considerably far from zero and our p-value (2e-16) is extremely small indicating that there is a significant relationship between the Baseflow response and date. 
+
+The next question is whether the same downward trend for baseflow is observed during the validation period.
+
+
+```{r BF Val Period}
+# Baseflow Validation period
+
+bf_val <- filter(obs_bf,Date >= '2008-12-01')
+
+plot(bf_val$Date, bf_val$bf, main = "Baseflow - Validation Period", xlab = x_lab, ylab = y_lab, col = "blue", pch = 16 )
+
+fit_val <- lm(bf_val$bf ~ bf_val$Date)
+abline(lm(bf_val$bf ~ bf_val$Date), col = "red")
+```
+.
+
+Again it looks like we have a negative trend, though the slope here appears to be less steep than that of the calibration period.
+
+```{r}
+summary(fit_val)
+```
+.
+
+According to our statistical results, we have a significant downward trend in baseflow over time during the validation period (p-value = 3.10e-05).
+
+In both the calibration period and validation period, the baseflow is trending downward. Perhaps irrigation is a contributing factor to the decrease in baseflow during these periods. However when zooming out and considering the entire period from 2002-2016, there is **not** an observable trend due to peaks in baseflow especially during 2009 and early 2010. 
+
+.
+
+###Observed Discharge
+
+Now lets look to see if we observe any trends over time in the observed discharge [m^3] data. 
+
+First we need to remove the baseflow from our observed discharge reported from the Big Sunflower gage station. 
+
+```{r Remove Baseflow}
+# Observed (Baseflow removed)
+
+obs_bf[[5]] <- obs_bf[[2]] - obs_bf[[3]]
+colnames(obs_bf)[5] <- 'Q_bf_removed'
+obs_bf_removed <- select(obs_bf,Date,Q_bf_removed)
+colnames(obs_bf_removed) <- c('Date','Discharge')
+```
+.
+
+Once the baseflow has been subtracted out of the observed discharge, we can plot it. 
+
+```{r Plot Observed}
+y_lab2 <- "Discharge [m^3]"
+plot(obs_bf_removed$Date, obs_bf_removed$Discharge, main = "Observed (Baseflow Removed)", xlab = x_lab, ylab = y_lab2, col = "blue", pch = 16)
+
+obs_fit <- lm(obs_bf_removed$Discharge ~ obs_bf_removed$Date)
+abline(lm(obs_bf_removed$Discharge ~ obs_bf_removed$Date), col = "red")
+```
+.
+
+It appears as though there is a slight negative trend in observed discharge from 2002-2016. 
+
+```{r}
+summary(obs_fit)
+```
+.
+
+The summary statistics appear to tell the same story. Our low p-value indicates a highly significant relationship between observed discharge and time. The f-statistic (12.74) is also relatively far from 1, indicating that the downward trend is likely not a random occurrence.
+
+We can go a step further with our investigation and break the observed discharge down into calibration and validation periods like we did for the baseflow. 
+
+```{r Plot Obs Cal}
+# Observed Calibration Period
+
+obs_cal <- filter(obs_bf_removed,Date <= '2008-12-01')
+
+plot(obs_cal$Date, obs_cal$Discharge, main = "Observed - Calibration Period", xlab = x_lab, ylab = y_lab2, col = "blue", pch = 16)
+
+obs_cal_fit <- lm(obs_cal$Discharge ~ obs_cal$Date)
+abline(lm(obs_cal$Discharge ~ obs_cal$Date), col = "red")
+```
+.
+
+The trend is downward sloping for the calibration period as expected given the overall downward trend for the entire period 2002-2016.
+
+```{r}
+summary(obs_cal_fit)
+```
+.
+
+We have a significant p-value and much higher F-statistic. The Date slope coefficient (-827.9) has also steepened. 
+
+A similar downward trend should occur in the validation period.
+
+```{r Plot Obs Val}
+# Observed Validation Period
+
+obs_val <- filter(obs_bf_removed,Date >= '2008-12-01')
+
+plot(obs_val$Date, obs_val$Discharge, main = "Observed - Validation Period", xlab = x_lab, ylab = y_lab2, col = "blue", pch = 16)
+
+obs_val_fit <- lm(obs_val$Discharge ~ obs_val$Date)
+abline(lm(obs_val$Discharge ~ obs_val$Date), col = "red")
+summary(obs_val_fit)
+```
+.
+
+When we look at the plot and statistics for the validation period 2008-2016, the downward slope is still significant but not as steep.
+
+###Observed Discharge (Monthly)
+
+If we were to look at the data aggregated monthly, the same overall trends should hold true.
+
+```{r}
+obs_bf_removed_bymonth <- obs_bf_removed
+obs_bf_removed_bymonth$Date <- floor_date(obs_bf_removed_bymonth$Date, "month")
+obs_bf_removed_bymonth <- aggregate(Discharge~Date, data=obs_bf_removed_bymonth, FUN=sum)
+
+plot(obs_bf_removed_bymonth$Date, obs_bf_removed_bymonth$Discharge, main = "Observed by Month (Baseflow Removed)", xlab = x_lab, ylab = y_lab2, col = "blue", pch = 16)
+
+obs_fit <- lm(obs_bf_removed_bymonth$Discharge ~ obs_bf_removed_bymonth$Date)
+abline(lm(obs_bf_removed_bymonth$Discharge ~ obs_bf_removed_bymonth$Date), col = "red")
+```
+.
+
+###Summary
+
+When considering baseflow from 2002 to 2016, there is no positive or negative trend to the data over time. However when split into calibration (2002-2008) and validation (2008-2016) periods, downward trends emerge.  
+
+The overall trend for the observed discharge (baseflow removed) did show a a negative trend with discharge over time. As with the baseflow, the downward trend was less severe during the validation period than the calibration period. This makes sense considering the baseflow and observed discharge are directly correlated.
+
+It would be useful to understand in what ways processes such as irrigation might be contributing to these downward trends, in order to better calibrate our model parameters.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
