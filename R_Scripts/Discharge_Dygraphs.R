@@ -78,8 +78,8 @@ for (i in files){
 
 # Dygraphs ----------------------------------------------------------------
 
-dis <- cbind(obs_bf_removed_bymonth,select(Sim_VY_I5_SCN_bymonth,Discharge),select(Sim_VY_I5_CN16_bymonth,Discharge))
-colnames(dis) <- c('Date','obsDis','Season','Sim_VY_I5_SCN','Sim_VY_I5_CN16')
+dis <- cbind(obs_bf_removed_bymonth,select(Sim_VY_VI_SI_old_bymonth,Discharge))
+colnames(dis) <- c('Date','obsDis','Season','Sim_VY_VI_SI_old_bymonth')
 
 winter_months <- which(dis$Season == "winter") 
 spring_months <- which(dis$Season == "spring")
@@ -91,19 +91,36 @@ ribbon_data[spring_months] <-  0.25
 ribbon_data[summer_months] <-  0.5
 ribbon_data[fall_months] <-  0.75
 
-dis_xts <- xts(select(dis,obsDis,Sim_VY_I5_SCN,Sim_VY_I5_CN16),order.by=dis$Date)
+dis_xts <- xts(select(dis,obsDis,Sim_VY_VI_SI_old_bymonth),order.by=dis$Date)
 
-dy_dis <- dygraph(dis_xts, main = 'Simulated Discharge - Variable Curve Numbers', group='ensync',height = 450, width = "100%") %>%
-  dyRangeSelector() %>%
+dy_dis <- dygraph(dis_xts, main = 'Simulated Discharge - Before Calibration Validation', group='ensync',height = 450, width = "100%") %>%
+  #dyRangeSelector() %>%
   dySeries("obsDis", label = "Observed") %>%  
-  dySeries("Sim_VY_I5_SCN", label = "Sim_VY_I5_SCN") %>%
-  dySeries("Sim_VY_I5_CN16", label = "Sim_VY_I5_CN16") %>%
+  #dySeries("Sim_VY_I5_SCN", label = "Sim_VY_I5_SCN") %>%
+  dySeries("Sim_VY_VI_SI_old_bymonth", label = "Sim_VY_VI") %>%
   dyAxis('y', label = ' Discharge (m^3)') %>%
   #dyRibbon(data = ribbon_data, top = 0.15, bottom = 0.0, palette = c("#33A5FF","#A2FF33","#FF3633","#FFC133")) %>%
   dyOptions(colors = RColorBrewer::brewer.pal(4, "Set1"),axisLineWidth = 1.5)  
 
 dy_dis
 
-#multi_dy_daily_bf_removed <- dy_dis_daily_new %>% tagList(dy_dis_daily_old) %>% browsable()
-#multi_dy_daily_bf_removed
+
+# Sim results for adjusted sec climate runs
+
+dis_opup <- cbind(obs_bf_removed_bymonth, select(Sim_VY_I5_CN16_Int5_OPUP_bymonth, Discharge))
+colnames(dis_opup) <- c('Date','obsDis','Season','Sim_VY_I5_CN16_Int5_OPUP_bymonth') 
+
+dis_opup_xts <- xts(select(dis_opup, obsDis, Sim_VY_I5_CN16_Int5_OPUP_bymonth), order.by = dis_opup$Date)
+
+dy_dis_opup <- dygraph(dis_opup_xts, main = "Simulated Discharge - After Calibration Validation", group = 'ensync', height = 450, width = "100%") %>%
+  #dyRangeSelector() %>%
+  dySeries("obsDis", label = "Observed") %>%  
+  dySeries("Sim_VY_I5_CN16_Int5_OPUP_bymonth", label = "Sim_VY_I5_CN16") %>%
+  #dySeries("Sim_VY_I5_SCN_Int5_OPUP", label = "Sim_VY_I5_SCN_Int5_OPUP") %>%
+  dyAxis('y', label = ' Discharge (m^3)',valueRange = c(0, 500100000)) %>%
+  #dyRibbon(data = ribbon_data, top = 0.15, bottom = 0.0, palette = c("#33A5FF","#A2FF33","#FF3633","#FFC133")) %>%
+  dyOptions(colors = RColorBrewer::brewer.pal(4, "Set1"),axisLineWidth = 1.5)
+
+multi_dy <- dy_dis %>% tagList(dy_dis_opup) %>% browsable()
+multi_dy
 
