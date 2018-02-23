@@ -1,0 +1,19 @@
+# WES PORTER
+# 23-JAN-2018
+# USDA PROJECT
+# Summary: Bulk download ESPA images using PowerShell and download_espa_order.py
+# ESPA Bulk Downloader Link:
+# https://github.com/USGS-EROS/espa-bulk-downloader
+
+Set-Location E:/Wes/Work/USDA/raw/Mississippi/MS_NDVI/ESPA_API/espa-bulk-downloader-master
+
+# Secure password
+
+$password = Read-Host "Enter password" -AsSecureString
+$password = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($password)
+$password = [Runtime.InteropServices.Marshal]::PtrToStringAuto($password)
+echo $password
+
+# Request downloads using USGS credentials and order id
+
+python download_espa_order.py -e wsp2s@mtmail.mtsu.edu -o espa-wsp2s@mtmail.mtsu.edu-01222018-122915-312 -d C:/Users/wsp2sgis/Downloads -u wsp2s -p $password

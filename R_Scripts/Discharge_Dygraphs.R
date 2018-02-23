@@ -17,7 +17,7 @@ library(zoo)
 
 
 # In files location
-in_loc = file.path("E:","Wes","Work","USDA","raw","Mississippi","MS_BaseflowRemoval","Discharge_Analysis_AUGUST_8_2017","R_input")
+in_loc <- file.path("E:","Wes","Work","USDA","raw","Mississippi","MS_BaseflowRemoval","Discharge_Analysis_AUGUST_8_2017","R_input", "Cal_Val_Inputs")
 
 # Read in USGS observed total streamflow
 obs <- read.csv(paste(in_loc,"/observed_discharge.csv",sep=''),stringsAsFactors = FALSE)
@@ -115,7 +115,7 @@ dis_opup_xts <- xts(select(dis_opup, obsDis, Sim_VY_I5_CN16_Int5_OPUP_bymonth), 
 dy_dis_opup <- dygraph(dis_opup_xts, main = "Simulated Discharge - After Calibration Validation", group = 'ensync', height = 450, width = "100%") %>%
   #dyRangeSelector() %>%
   dySeries("obsDis", label = "Observed") %>%  
-  dySeries("Sim_VY_I5_CN16_Int5_OPUP_bymonth", label = "Sim_VY_I5_CN16") %>%
+  dySeries("Sim_VY_I5_CN16_Int5_OPUP_bymonth", label = "Sim_VY_I5_CN16_Int5_OPUP") %>%
   #dySeries("Sim_VY_I5_SCN_Int5_OPUP", label = "Sim_VY_I5_SCN_Int5_OPUP") %>%
   dyAxis('y', label = ' Discharge (m^3)',valueRange = c(0, 500100000)) %>%
   #dyRibbon(data = ribbon_data, top = 0.15, bottom = 0.0, palette = c("#33A5FF","#A2FF33","#FF3633","#FFC133")) %>%

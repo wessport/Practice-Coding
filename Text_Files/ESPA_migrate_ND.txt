@@ -1,0 +1,51 @@
+# WES PORTER
+# 10/13/2017
+# USDA PROJECT
+# Summary: Relocating ESPA images into new subdirectories using PowerShell.
+
+# THE GREAT MIGRATION OF ESPA IMAGES
+
+# mv ndvi files
+mv *sr_ndvi.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_NDVI
+
+# mv top of atmosphere files
+mv *toa_band1.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/TOA
+mv *toa_band2.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/TOA
+mv *toa_band3.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/TOA
+mv *toa_band4.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/TOA
+mv *toa_band5.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/TOA
+mv *toa_band7.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/TOA
+
+# mv pixel quality assurance files
+mv *VER.txt //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/PIXEL_QA
+mv *VER.jpg //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/PIXEL_QA
+mv *pixel_qa.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/PIXEL_QA
+mv *radsat_qa.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/PIXEL_QA
+mv *azimuth_band4.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/PIXEL_QA
+mv *zenith_band4.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/PIXEL_QA
+
+# mv surface reflectance files
+mv *ANG.txt //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *MTL.txt //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *GCP.txt //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *.xml //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *bqa.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *b1.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *b2.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *b3.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *b4.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *b5.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *b6.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *b7.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_band1.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_band2.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_band3.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_band4.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_band5.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_band6.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_band7.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_cloud_qa.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+mv *sr_atmos_opacity.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR
+
+
+# FILE MIGRATION COMPLETE.

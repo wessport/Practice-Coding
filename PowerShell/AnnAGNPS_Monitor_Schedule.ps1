@@ -34,7 +34,6 @@ do
 
 while ($b -eq 1)
 
-
 cd "E:/Wes/School/Fall_2017/GSA/Lab7/AnnAGNPS_Sims/K0/"
 
 start-process 'E:/Wes/School/Fall_2017/GSA/Lab7/AnnAGNPS_Sims/K0/AnnAGNPS.exe'

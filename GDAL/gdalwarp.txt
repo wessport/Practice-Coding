@@ -3,11 +3,11 @@
 gdalwarp -t_srs EPSG:26914 LT50300282000357.B3.tif LT50300282000357.B3_proj.tif
 
 # For loop through rasters in folder
-FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26914 %I %~nI_proj.tif
+FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26916 %I %~nI_proj.tif
 
 # Mosaic
 
-gdalwarp -t_srs EPSG:26916 LC80230362015029.B5.tif LC80230372015029.B5.tif mosaic.tif
+gdarlwarp -t_srs EPSG:26916 LC80230362015029.B5.tif LC80230372015029.B5.tif mosaic.tif
 
 FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26916 %I %~nI_proj.tif
 
@@ -27,4 +27,18 @@ gdal_calc.py -A LT50231995054_msc.tif --outfile=LT50231995054_msc_test.tif --cal
 
 C:/Python27_old/ArcGISx6410.3/python.exe C:/OSGeo4W64/bin/gdal_calc.py -A LT50231995054_msc.tif --outfile=LT50231995054_msc_test.tif --calc="A*(A!=-9999)"
 
-# doesn't work because ArcGIS numpy is out of date and you can't update it without breaking ArcGIS. 
+# doesn't work because ArcGIS numpy is out of date and you can't update it without breaking ArcGIS.
+
+
+# Clip and Reproject
+
+FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26916 -cutline MS_ESPA_Clip.shp -cl MS_ESPA_Clip -crop_to_cutline %I %~nI_prj.tif
+
+gdalwarp -t_srs EPSG:26916 -cutline MS_ESPA_Clip.shp -cl MS_ESPA_Clip -crop_to_cutline LT05_L1GS_023036_19850502_20161004_01_T2_sr_ndvi_org.tif LT05_L1GS_023036_19850502_20161004_01_T2_sr_ndvi_prj.tif
+
+
+# Gdalwarp to fix ND 2000 images
+
+gdalwarp -t_srs EPSG:26914 LT05_L1GS_030028_20000121_20160919_01_T2_sr_ndvi_proj_masked.tif -dstnodata -9999 -te 544824.177 5117058.451 582054.177 5177988.451 -tr 30.0 30.0 LT05_L1GS_030028_20000121_20160919_01_T2_sr_ndvi_proj_masked_test.tif
+
+FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26914 %I -dstnodata -9999 -te 544824.177 5117058.451 582054.177 5177988.451 -tr 30.0 30.0 %~nI_fix.tif
