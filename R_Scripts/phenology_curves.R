@@ -79,6 +79,9 @@ legend('topleft',
 )
 
 
+# Join cdl information to smoothed ndvi values
+smoothed_ndvi_cdl <- right_join(smoothed_ndvi, ndvi_stats_2000, by = c("field_ID" = "field_id"))
+smoothed_ndvi_cdl <- select(test, field_ID, DOY, mean_ndvi, cdl)
 
 
 

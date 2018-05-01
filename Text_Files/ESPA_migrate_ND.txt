@@ -49,3 +49,18 @@ mv *sr_atmos_opacity.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_ND
 
 
 # FILE MIGRATION COMPLETE.
+
+mv *b1_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *b2_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *b3_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *b4_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *b5_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *b6_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *b7_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *sr_band1_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *sr_band2_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *sr_band3_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *sr_band4_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *sr_band5_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *sr_band6_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected
+mv *sr_band7_prj.tif //161.45.156.61/Public/Wes/USDA/Data/North_Dakota/ND_NDVI/ESPA_NDVI/unzipped/SR_projected

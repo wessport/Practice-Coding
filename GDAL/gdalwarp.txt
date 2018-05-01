@@ -42,3 +42,5 @@ gdalwarp -t_srs EPSG:26916 -cutline MS_ESPA_Clip.shp -cl MS_ESPA_Clip -crop_to_c
 gdalwarp -t_srs EPSG:26914 LT05_L1GS_030028_20000121_20160919_01_T2_sr_ndvi_proj_masked.tif -dstnodata -9999 -te 544824.177 5117058.451 582054.177 5177988.451 -tr 30.0 30.0 LT05_L1GS_030028_20000121_20160919_01_T2_sr_ndvi_proj_masked_test.tif
 
 FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26914 %I -dstnodata -9999 -te 544824.177 5117058.451 582054.177 5177988.451 -tr 30.0 30.0 %~nI_fix.tif
+
+FOR %I IN (*.TIF) DO gdalwarp -t_srs EPSG:26914 %I -te 544824.177 5117058.451 582054.177 5177988.451 -tr 30.0 30.0 %~nI_prj.tif
